@@ -1,43 +1,25 @@
-#include "lists.h"
-#include <stdlib.h>
-
+#include<stdio.h>
+#include"lists.h"
 /**
- * _realloc - Reallocates a memory block
- * @ptr: The pointer to the previous memory block
- * @old_size: The size of the old memory block
- * @new_size: The size of the new memory block
- *
- * Return: The pointer to the new memory block otherwise NULL
+ * check_cycle - Checks if a singly-linked list contains a cycle
+ * @list: A singly-linked list.
+ * Return: 0 If there is no cycle.
+ *         If there is a cycle.
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+int check_cycle(listint_t *list)
 {
-	void *new_ptr;
-	unsigned int min_size = old_size < new_size ? old_size : new_size;
-	unsigned int i;
-
-	if (new_size == old_size)
-		return (ptr);
-	if (ptr != NULL)
+	listint_t *current, *new;
+	
+	if (list == NULL || list->next == NULL)
+		return (0);
+	current = list->next;
+	new = list->next->next;
+	while (current && new && new->next)
 	{
-		if (new_size == 0)
-		{
-			free(ptr);
-			return (NULL);
-		}
-		new_ptr = malloc(new_size);
-		if (new_ptr != NULL)
-		{
-			for (i = 0; i < min_size; i++)
-				*((char *)new_ptr + i) = *((char *)ptr + i);
-			free(ptr);
-			return (new_ptr);
-		}
-		free(ptr);
-		return (NULL);
+		if (current == new)
+			return (1);
+		current = current->next;
+		new = new->next->next;
 	}
-	else
-	{
-		new_ptr = malloc(new_size);
-		return (new_ptr);
-	}
+	return (0);
 }
